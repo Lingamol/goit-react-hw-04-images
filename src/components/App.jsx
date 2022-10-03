@@ -1,3 +1,8 @@
+import ImageGallery from './ImageGallery';
+import GallaryItem from './ImageGalleryItem';
+import Modal from './Modal';
+import Searchbar from './Searchbar';
+const onSearch = () => {};
 export const App = () => {
   return (
     <div
@@ -10,7 +15,11 @@ export const App = () => {
     //   color: '#010101'
     // }}
     >
-      React homework template
+      {/* React homework template */}
+      <Searchbar onSearch={onSearch} />
+      <ImageGallery />
+      <GallaryItem />
+      <Modal />
     </div>
   );
 };
