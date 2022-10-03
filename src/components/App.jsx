@@ -1,5 +1,7 @@
+import Button from './Button';
 import ImageGallery from './ImageGallery';
 import GallaryItem from './ImageGalleryItem';
+import Loader from './Loader';
 import Modal from './Modal';
 import Searchbar from './Searchbar';
 const onSearch = () => {};
@@ -20,6 +22,8 @@ export const App = () => {
       <ImageGallery />
       <GallaryItem />
       <Modal />
+      <Loader />
+      <Button />
     </div>
   );
 };
