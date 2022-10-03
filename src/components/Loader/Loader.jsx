@@ -11,9 +11,9 @@ const Loader = () => {
         wrapperClass=""
         visible={true}
         ariaLabel="three-circles-rotating"
-        outerCircleColor=""
+        outerCircleColor="red"
         innerCircleColor=""
-        middleCircleColor=""
+        middleCircleColor="green"
       />
     </div>
   );
