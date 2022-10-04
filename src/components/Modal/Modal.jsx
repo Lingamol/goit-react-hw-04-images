@@ -1,6 +1,6 @@
 import { Component } from 'react';
 import { createPortal } from 'react-dom';
-import { ModalImg, Overlay } from './Modal.styled';
+import { ModalImg, Overlay, ModalContent } from './Modal.styled';
 
 const modalRoot = document.querySelector('#modal-root');
 class Modal extends Component {
@@ -11,6 +11,7 @@ class Modal extends Component {
   };
   componentDidMount() {
     window.addEventListener('keydown', this.onOpenModal);
+    console.log('modal Mount');
   }
 
   componentWillUnmount() {
@@ -21,12 +22,20 @@ class Modal extends Component {
   render() {
     return createPortal(
       <Overlay className="overlay">
-        <Modal className="modal">
-          <ModalImg src="" alt="" />
-        </Modal>
+        <ModalContent className="modal">
+          {/* <ModalImg src="" alt="" /> */}
+        </ModalContent>
       </Overlay>,
       modalRoot
     );
   }
+  // return (
+  //   <Overlay className="overlay">
+  //     <ModalContent className="modal">
+  //       {/* <ModalImg src="" alt="" /> */}
+  //     </ModalContent>
+  //   </Overlay>
+  // );
 }
+
 export default Modal;

@@ -1,6 +1,15 @@
 import { LoadMoreBtn } from './Button.styled';
-
-const Button = () => {
-  return <LoadMoreBtn type="button">Load more</LoadMoreBtn>;
+// const onLoadMore=()=>{props.}
+const Button = ({ onLoadMore }) => {
+  return (
+    <LoadMoreBtn
+      onClick={() => {
+        onLoadMore();
+      }}
+      type="button"
+    >
+      Load more
+    </LoadMoreBtn>
+  );
 };
 export default Button;

@@ -21,11 +21,12 @@ export class App extends Component {
     return (
       <AppWrapper>
         <Searchbar onSearch={onSearch} />
-        <ImageGallery />
-        <GallaryItem />
+        {/* <ImageGallery />
+        <GallaryItem /> */}
+        {/* <Modal /> */}
         {showModal && <Modal onClose={this.toggleModal} />}
         <Loader />
-        <Button />
+        <Button onLoadMore={this.toggleModal} />
       </AppWrapper>
     );
   }
