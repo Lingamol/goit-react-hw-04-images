@@ -4,26 +4,29 @@ import GallaryItem from './ImageGalleryItem';
 import Loader from './Loader';
 import Modal from './Modal';
 import Searchbar from './Searchbar';
+import { Component } from 'react';
+import { AppWrapper } from './App.styled';
 const onSearch = () => {};
-export const App = () => {
-  return (
-    <div
-    // style={{
-    //   height: '100vh',
-    //   display: 'flex',
-    //   justifyContent: 'center',
-    //   alignItems: 'center',
-    //   fontSize: 40,
-    //   color: '#010101'
-    // }}
-    >
-      {/* React homework template */}
-      <Searchbar onSearch={onSearch} />
-      <ImageGallery />
-      <GallaryItem />
-      <Modal />
-      <Loader />
-      <Button />
-    </div>
-  );
-};
+export class App extends Component {
+  state = { showModal: false };
+
+  toggleModal = () => {
+    this.setState(({ showModal }) => ({
+      showModal: !showModal,
+    }));
+  };
+
+  render() {
+    const { showModal } = this.state;
+    return (
+      <AppWrapper>
+        <Searchbar onSearch={onSearch} />
+        <ImageGallery />
+        <GallaryItem />
+        {showModal && <Modal onClose={this.toggleModal} />}
+        <Loader />
+        <Button />
+      </AppWrapper>
+    );
+  }
+}

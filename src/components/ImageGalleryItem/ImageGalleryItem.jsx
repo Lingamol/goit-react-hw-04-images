@@ -1,8 +1,8 @@
-import { GallaryItem, GallaryImg } from './ImageGalleryItem.styled';
+import { GallaryItem, GallaryItemImg } from './ImageGalleryItem.styled';
 const ImageGalleryItem = () => {
   return (
     <GallaryItem className="gallery-item">
-      <GallaryImg src="" alt="" />
+      <GallaryItemImg src="" alt="" />
     </GallaryItem>
   );
 };

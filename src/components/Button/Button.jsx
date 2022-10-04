@@ -1,4 +1,6 @@
+import { LoadMoreBtn } from './Button.styled';
+
 const Button = () => {
-  return <button type="button">Load more</button>;
+  return <LoadMoreBtn type="button">Load more</LoadMoreBtn>;
 };
 export default Button;

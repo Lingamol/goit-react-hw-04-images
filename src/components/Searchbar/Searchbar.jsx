@@ -1,6 +1,11 @@
 import { Formik, ErrorMessage } from 'formik';
 // import PropTypes from 'prop-types';
-import { SearchForm, FormInput, FormErrorMessage } from './Searchbar.styled';
+import {
+  SearchForm,
+  FormInput,
+  FormErrorMessage,
+  SearchBar,
+} from './Searchbar.styled';
 import * as yup from 'yup';
 
 const initialValues = { search: '' };
@@ -25,7 +30,7 @@ const schema = yup.object().shape({
 
 const Searchbar = () => {
   return (
-    <header className="searchbar">
+    <SearchBar className="searchbar">
       <Formik
         initialValues={initialValues}
         validationSchema={schema}
@@ -47,7 +52,7 @@ const Searchbar = () => {
           <ErrorMessage name="search" component={FormErrorMessage} />
         </SearchForm>
       </Formik>
-    </header>
+    </SearchBar>
   );
 };
 export default Searchbar;
