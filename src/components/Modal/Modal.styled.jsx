@@ -32,5 +32,6 @@ export const ModalContent = styled.div`
 export const ModalImg = styled.img`
   display: block;
   max-width: 100%;
-  height: auto;
+  /* height: auto; */
+  max-height: 720px;
 `;
