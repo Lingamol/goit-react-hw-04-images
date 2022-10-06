@@ -1,30 +1,75 @@
+import axios from 'axios';
 import Button from './Button';
 import ImageGallery from './ImageGallery';
-import GallaryItem from './ImageGalleryItem';
 import Loader from './Loader';
 import Modal from './Modal';
 import Searchbar from './Searchbar';
 import { Component } from 'react';
 import { AppWrapper } from './App.styled';
-const onSearch = () => {};
+import { hits } from '../js/data';
+// import api from '../services/api';
+axios.defaults.baseURL = 'https://pixabay.com/api';
+
 export class App extends Component {
-  state = { showModal: false };
+  state = {
+    // showModal: false,
+    isLoading: false,
+    error: null,
+    galleryColection: [...hits],
+    activeGalleryItem: null,
+    search: null,
+  };
 
   toggleModal = () => {
-    this.setState(({ showModal }) => ({
-      showModal: !showModal,
+    // this.setState(({ showModal }) => ({
+    //   showModal: !showModal,
+    // }));
+    this.setState(({ activeGalleryItem }) => ({
+      activeGalleryItem: null,
     }));
   };
 
+  onSelectGalleryItem = item => {
+    this.setState({ activeGalleryItem: item });
+  };
+
+  heandleSubmitForm = ({ search }) => {
+    console.log(search);
+    const normalizedSearch = search.toLocaleLowerCase();
+    if (normalizedSearch && normalizedSearch !== this.state.search) {
+      this.setState({ search: normalizedSearch });
+    }
+
+    // else {
+    //   const newId = nanoid();
+    //   const newContact = { id: newId, ...data };
+    //   console.log(data);
+    //   this.setState(prevState => ({
+    //     contacts: [newContact, ...prevState.contacts],
+    //   }));
+    // }
+  };
+
   render() {
-    const { showModal } = this.state;
+    const { activeGalleryItem } = this.state;
+    // console.log(this.state.gellaryColection);
     return (
       <AppWrapper>
-        <Searchbar onSearch={onSearch} />
-        {/* <ImageGallery />
-        <GallaryItem /> */}
+        <Searchbar onSubmit={this.heandleSubmitForm} />
+        <ImageGallery
+          galleryColection={this.state.galleryColection}
+          onSelectGalleryItem={item => {
+            this.onSelectGalleryItem(item);
+          }}
+        />
+
         {/* <Modal /> */}
-        {showModal && <Modal onClose={this.toggleModal} />}
+        {activeGalleryItem && (
+          <Modal
+            onClose={this.toggleModal}
+            activeGalleryItem={this.state.activeGalleryItem}
+          />
+        )}
         <Loader />
         <Button onLoadMore={this.toggleModal} />
       </AppWrapper>
