@@ -60,7 +60,6 @@ export class App extends Component {
               galleryColection: [],
             });
           }
-
           toast.warning(
             'Sorry, there are no images matching your search query. Please try again.',
             {
@@ -73,6 +72,7 @@ export class App extends Component {
               progress: undefined,
             }
           );
+
           return;
         } else {
           this.setState({
@@ -87,7 +87,7 @@ export class App extends Component {
           error,
           totalHits: null,
           page: null,
-          galleryColection: [],
+          galleryColection: null,
         });
         toast.error('Sorry, something going wrong :(', {
           position: 'top-right',
