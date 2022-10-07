@@ -18,7 +18,7 @@ export class App extends Component {
     galleryColection: null,
     activeGalleryItem: null,
     search: null,
-    page: null,
+    page: 1,
     totalHits: null,
   };
   componentDidMount() {
@@ -42,7 +42,9 @@ export class App extends Component {
       prevState.search !== this.state.search
     ) {
       if (prevState.search !== this.state.search) {
-        this.setState({ page: 1 });
+        if (this.state.page !== 1) {
+          this.setState({ page: 1 });
+        }
       }
       this.setState({ isLoading: true, galleryColection: null });
       try {
@@ -53,13 +55,13 @@ export class App extends Component {
         const { hits, totalHits } = data;
         // img = images;
         if (hits.length === 0) {
-          if (this.state.page) {
-            this.setState({
-              totalHits: null,
-              page: null,
-              galleryColection: [],
-            });
-          }
+          // if (this.state.page) {
+          this.setState({
+            totalHits: null,
+
+            galleryColection: null,
+          });
+          // }
           toast.warning(
             'Sorry, there are no images matching your search query. Please try again.',
             {
@@ -85,9 +87,6 @@ export class App extends Component {
       } catch (error) {
         this.setState({
           error,
-          totalHits: null,
-          page: null,
-          galleryColection: null,
         });
         toast.error('Sorry, something going wrong :(', {
           position: 'top-right',
