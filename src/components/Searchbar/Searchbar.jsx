@@ -1,11 +1,11 @@
 import { Formik, ErrorMessage } from 'formik';
-// import PropTypes from 'prop-types';
+import PropTypes from 'prop-types';
 // import { ReactComponent as Envelope } from '../img/envelope.svg';
 import {
   SearchForm,
   FormInput,
   FormErrorMessage,
-  SearchBar,
+  SearchBarWrapper,
   // SearchFormButtonLabel,
   FormBtn,
   SvgBtn,
@@ -13,11 +13,11 @@ import {
 import * as yup from 'yup';
 import { Component } from 'react';
 
-class Searchbar extends Component {
+class SearchBar extends Component {
   initialValues = { search: '' };
 
   onSubmitForm = (values, { resetForm }) => {
-    console.log('values', values);
+    // console.log('values', values);
     //   console.log('actions', actions);
     this.props.onSubmit(values);
     resetForm();
@@ -29,14 +29,14 @@ class Searchbar extends Component {
       .max(20)
       .matches(
         /^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$/,
-        "Name may contain only letters, apostrophe, dash and spaces. For example Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan"
+        'Search may contain only letters, apostrophe, dash and spaces. '
       )
       .required(),
   });
 
   render() {
     return (
-      <SearchBar className="searchbar">
+      <SearchBarWrapper className="searchbar">
         <Formik
           initialValues={this.initialValues}
           validationSchema={this.schema}
@@ -62,8 +62,9 @@ class Searchbar extends Component {
           </SearchForm>
         </Formik>
         {/* <Envelope width="90" height="90" color="red" /> */}
-      </SearchBar>
+      </SearchBarWrapper>
     );
   }
 }
-export default Searchbar;
+export default SearchBar;
+SearchBar.propTypes = { onSubmit: PropTypes.func.isRequired };

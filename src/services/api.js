@@ -1,26 +1,28 @@
 import axios from 'axios';
+// import { PER_PAGE } from 'components/App.jsx';
 // axios.defaults.baseURL = 'https://api.thedogapi.com/v1';
 axios.defaults.baseURL = 'https://pixabay.com/api';
 // axios.defaults.headers.common['key'] = process.env.REACT_APP_API_KEY;
+export const PER_PAGE = 40;
 
 const params = {
   key: '29487870-d36fe710dee1f0536a07f7119',
   image_type: 'photo',
   orientation: 'horizontal',
   safesearch: true,
-  per_page: 40,
+  per_page: PER_PAGE,
 };
-let currentPage = 1;
-const fetchImagesWithQuery = async searchQuery => {
+// let currentPage = 1;
+export const fetchImagesWithQuery = async (searchQuery, currentPage) => {
   const response = await axios.get(
     `https://pixabay.com/api/?q=${searchQuery}&page=${currentPage}`,
     { params }
   );
-  // console.log('response.data.hits', response.data.hits);
-  return response.data.hits;
+  // console.log('response.data.hits', response.data);
+  return response.data;
 };
 
-export default fetchImagesWithQuery;
+// export fetchImagesWithQuery;
 
 // export const getBreeds = async () => {
 //   const response = await axios.get('/breeds');

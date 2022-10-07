@@ -4,23 +4,25 @@ import Button from './Button';
 import ImageGallery from './ImageGallery';
 import Loader from './Loader';
 import Modal from './Modal';
-import Searchbar from './Searchbar';
+import SearchBar from './Searchbar';
 import { Component } from 'react';
 import { AppWrapper } from './App.styled';
 // import { hits } from '../js/data';
-import api from 'services/api';
+import { fetchImagesWithQuery, PER_PAGE } from 'services/api';
 
 export class App extends Component {
   state = {
     // showModal: false,
     isLoading: false,
     error: null,
-    galleryColection: [],
+    galleryColection: null,
     activeGalleryItem: null,
     search: null,
+    page: null,
+    totalHits: null,
   };
   componentDidMount() {
-    // console.log('App Mount');
+    console.log('App Mount');
   }
 
   componentWillUnmount() {
@@ -29,16 +31,36 @@ export class App extends Component {
 
   async componentDidUpdate(prevProps, prevState, snapshot) {
     console.log('App componentDidUpdate');
-    if (prevState.search !== this.state.search) {
-      console.log('prevState.search', prevState.search);
-      console.log('this.state.search', this.state.search);
-      this.setState({ isLoading: true });
-
+    // if (prevState.search !== this.state.search) {
+    //   this.setState({ page: 1 });
+    //   // console.log('prevState.search', prevState.search);
+    //   // console.log('this.state.search', this.state.search);
+    //
+    // }
+    if (
+      prevState.page !== this.state.page ||
+      prevState.search !== this.state.search
+    ) {
+      if (prevState.search !== this.state.search) {
+        this.setState({ page: 1 });
+      }
+      this.setState({ isLoading: true, galleryColection: null });
       try {
-        const images = await api(this.state.search);
-        // const { hits } = data;
+        const data = await fetchImagesWithQuery(
+          this.state.search,
+          this.state.page
+        );
+        const { hits, totalHits } = data;
         // img = images;
-        if (images.length === 0) {
+        if (hits.length === 0) {
+          if (this.state.page) {
+            this.setState({
+              totalHits: null,
+              page: null,
+              galleryColection: [],
+            });
+          }
+
           toast.warning(
             'Sorry, there are no images matching your search query. Please try again.',
             {
@@ -52,12 +74,21 @@ export class App extends Component {
             }
           );
           return;
+        } else {
+          this.setState({
+            galleryColection: hits,
+            totalHits,
+          });
         }
-        this.setState({ galleryColection: images });
 
         // this.setState({ galleryColection: [...images] });
       } catch (error) {
-        this.setState({ error });
+        this.setState({
+          error,
+          totalHits: null,
+          page: null,
+          galleryColection: [],
+        });
         toast.error('Sorry, something going wrong :(', {
           position: 'top-right',
           autoClose: 2000,
@@ -88,27 +119,62 @@ export class App extends Component {
   };
 
   heandleSubmitForm = ({ search }) => {
-    console.log(search);
+    // console.log(search);
     const normalizedSearch = search.toLocaleLowerCase();
     if (normalizedSearch && normalizedSearch !== this.state.search) {
       this.setState({ search: normalizedSearch });
     }
   };
+  OnClickLoadMore = () => {
+    this.setState(prevState => ({
+      page: prevState.page + 1,
+    }));
+  };
+  onDisableLoadMore = () => {
+    const { totalHits, page } = this.state;
+    if (!totalHits) {
+      return true;
+    } else if (totalHits - PER_PAGE * page < 0) {
+      return true;
+    } else {
+      return false;
+    }
+  };
+
+  showBtnLoadMore = () => {
+    const { totalHits } = this.state;
+    if (totalHits / PER_PAGE > 1) {
+      return true;
+    } else {
+      return false;
+    }
+  };
+  // showGallery = () => {
+  //   const { totalHits } = this.state;
+  //   if (totalHits) {
+  //     return true;
+  //   } else {
+  //     return false;
+  //   }
+  // };
 
   render() {
-    const { activeGalleryItem, isLoading } = this.state;
+    const { activeGalleryItem, isLoading, galleryColection } = this.state;
     // console.log(this.state.gellaryColection);
+    const showBtnLoadMore = this.showBtnLoadMore();
+    // const showGallery = this.showGallery();
     return (
       <AppWrapper>
-        <Searchbar onSubmit={this.heandleSubmitForm} />
-        <ImageGallery
-          galleryColection={this.state.galleryColection}
-          onSelectGalleryItem={item => {
-            this.onSelectGalleryItem(item);
-          }}
-        />
+        <SearchBar onSubmit={this.heandleSubmitForm} />
+        {galleryColection && (
+          <ImageGallery
+            galleryColection={this.state.galleryColection}
+            onSelectGalleryItem={item => {
+              this.onSelectGalleryItem(item);
+            }}
+          />
+        )}
 
-        {/* <Modal /> */}
         {activeGalleryItem && (
           <Modal
             onClose={this.toggleModal}
@@ -116,7 +182,12 @@ export class App extends Component {
           />
         )}
         {isLoading && <Loader />}
-        <Button onLoadMore={this.toggleModal} />
+        {showBtnLoadMore && (
+          <Button
+            onLoadMore={this.OnClickLoadMore}
+            onDisableLoadMore={this.onDisableLoadMore}
+          />
+        )}
         <ToastContainer
           position="top-right"
           autoClose={2000}

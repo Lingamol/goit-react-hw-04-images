@@ -1,7 +1,8 @@
 import styled from '@emotion/styled';
 import { Form, Field } from 'formik';
 import { GoSearch } from 'react-icons/go';
-export const SearchBar = styled.header`
+
+export const SearchBarWrapper = styled.header`
   /* width: 230px;
   height: auto;
   margin-left: auto;
@@ -13,7 +14,7 @@ export const SearchBar = styled.header`
   /* align-items: center; */
   top: 0;
   left: 0;
-  position: sticky;
+  /* position: sticky; */
   /* z-index: 1100; */
   display: flex;
   justify-content: center;
@@ -91,6 +92,8 @@ export const FormBtn = styled.button`
 export const FormErrorMessage = styled.div`
   color: red;
   background-color: #3f51b5;
+  display: flex;
+  flex-direction: column;
 `;
 export const SearchFormButtonLabel = styled.label`
   position: absolute;

@@ -1,5 +1,6 @@
 import { Component } from 'react';
 import { createPortal } from 'react-dom';
+import PropTypes from 'prop-types';
 import { ModalImg, Overlay, ModalContent } from './Modal.styled';
 
 const modalRoot = document.querySelector('#modal-root');
@@ -27,7 +28,7 @@ class Modal extends Component {
   };
   render() {
     const { largeImageURL, tags } = this.props.activeGalleryItem;
-    console.log(this.props.activeGalleryItem);
+    // console.log(this.props.activeGalleryItem);
     return createPortal(
       <Overlay className="overlay" onClick={this.handleOverlayClick}>
         <ModalContent className="modal">
@@ -47,3 +48,9 @@ class Modal extends Component {
 }
 
 export default Modal;
+Modal.propTypes = {
+  activeGalleryItem: PropTypes.shape({
+    largeImageURL: PropTypes.string.isRequired,
+    tags: PropTypes.string.isRequired,
+  }).isRequired,
+};
