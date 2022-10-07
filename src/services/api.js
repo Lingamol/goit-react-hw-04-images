@@ -3,7 +3,7 @@ import axios from 'axios';
 // axios.defaults.baseURL = 'https://api.thedogapi.com/v1';
 axios.defaults.baseURL = 'https://pixabay.com/api';
 // axios.defaults.headers.common['key'] = process.env.REACT_APP_API_KEY;
-export const PER_PAGE = 40;
+export const PER_PAGE = 12;
 
 const params = {
   key: '29487870-d36fe710dee1f0536a07f7119',

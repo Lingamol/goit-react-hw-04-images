@@ -15,7 +15,7 @@ export class App extends Component {
     // showModal: false,
     isLoading: false,
     error: null,
-    galleryColection: null,
+    galleryColection: [],
     activeGalleryItem: null,
     search: null,
     page: 1,
@@ -43,10 +43,10 @@ export class App extends Component {
     ) {
       if (prevState.search !== this.state.search) {
         if (this.state.page !== 1) {
-          this.setState({ page: 1 });
+          this.setState({ page: 1, galleryColection: [] });
         }
       }
-      this.setState({ isLoading: true, galleryColection: null });
+      this.setState({ isLoading: true });
       try {
         const data = await fetchImagesWithQuery(
           this.state.search,
@@ -59,7 +59,7 @@ export class App extends Component {
           this.setState({
             totalHits: null,
 
-            galleryColection: null,
+            galleryColection: [],
           });
           // }
           toast.warning(
@@ -77,10 +77,10 @@ export class App extends Component {
 
           return;
         } else {
-          this.setState({
-            galleryColection: hits,
+          this.setState(state => ({
+            galleryColection: [...state.galleryColection, ...hits],
             totalHits,
-          });
+          }));
         }
 
         // this.setState({ galleryColection: [...images] });
