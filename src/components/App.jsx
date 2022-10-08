@@ -35,8 +35,12 @@ export class App extends Component {
 
   componentDidUpdate(prevProps, prevState, snapshot) {
     // console.log('App componentDidUpdate');
-    const { page, search } = this.state;
+    const { page, search, pagination } = this.state;
     if (prevState.search !== search || prevState.page !== page) {
+      this.FetchImg();
+    }
+    if (prevState.pagination !== pagination) {
+      this.setState({ galleryColection: [], page: 1 });
       this.FetchImg();
     }
   }

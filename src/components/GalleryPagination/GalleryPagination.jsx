@@ -9,7 +9,7 @@ const GalleryPagination = ({ onPagination, countPages }) => {
       <Pagination
         // boundaryCount={5}
         count={countPages}
-        // page={pageNumber}
+        // page={}
         showFirstButton
         showLastButton
         variant="outlined"
