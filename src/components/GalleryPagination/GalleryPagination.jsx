@@ -1,9 +1,9 @@
 import Pagination from '@mui/material/Pagination';
-// import PaginationItem from '@mui/material/PaginationItem';
+import PropTypes from 'prop-types';
 import React from 'react';
 import { PagginationWrapper } from './GalleryPagination.styled';
 
-const GalleryPagination = ({ onPagination, pageNumber, countPages }) => {
+const GalleryPagination = ({ onPagination, countPages }) => {
   return (
     <PagginationWrapper>
       <Pagination
@@ -22,3 +22,7 @@ const GalleryPagination = ({ onPagination, pageNumber, countPages }) => {
 };
 
 export default GalleryPagination;
+GalleryPagination.propTypes = {
+  onPagination: PropTypes.func.isRequired,
+  countPages: PropTypes.number.isRequired,
+};

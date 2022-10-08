@@ -38,13 +38,6 @@ class Modal extends Component {
       modalRoot
     );
   }
-  // return (
-  //   <Overlay className="overlay">
-  //     <ModalContent className="modal">
-  //       {/* <ModalImg src="" alt="" /> */}
-  //     </ModalContent>
-  //   </Overlay>
-  // );
 }
 
 export default Modal;

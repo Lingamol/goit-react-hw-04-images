@@ -1,4 +1,4 @@
-// import { ToastContainer, toast } from 'react-toastify';
+import { ToastContainer, toast } from 'react-toastify';
 
 import 'react-toastify/dist/ReactToastify.css';
 import Button from './Button';
@@ -10,7 +10,8 @@ import { Component } from 'react';
 import { AppWrapper } from './App.styled';
 // import { hits } from '../js/data';
 import { fetchImagesWithQuery, PER_PAGE } from 'services/api';
-import GalleryPagination from 'GalleryPagination';
+import GalleryPagination from 'components/GalleryPagination';
+// import GallaryContentLoader from 'GallaryContentLoader';
 
 export class App extends Component {
   state = {
@@ -22,7 +23,7 @@ export class App extends Component {
     search: '',
     page: 1,
     totalHits: 0,
-    pagination: true,
+    pagination: false,
   };
   componentDidMount() {
     console.log('App Mount');
@@ -38,28 +39,10 @@ export class App extends Component {
     if (prevState.search !== search || prevState.page !== page) {
       this.FetchImg();
     }
-
-    // if (prevState.search !== search && prevState.page !== 1) {
-    //   this.setState({ page: 1, galleryColection: [] });
-    //   this.FetchImg();
-    //   console.log(
-    //     'App componentDidUpdate prevState.search !== search && prevState.page !== 1'
-    //   );
-    //   return;
-    // } else if (prevState.search !== search && prevState.page === 1) {
-    //   this.setState({ galleryColection: [] });
-    //   this.FetchImg();
-    //   console.log(
-    //     'App componentDidUpdate prevState.search !== search && prevState.page === 1'
-    //   );
-    //   return;
-    // } else if (prevState.search === search && prevState.page !== page) {
-    //   this.FetchImg();
-    //   console.log('prevState.search === search && prevState.page !== page');
-    // }
   }
 
   FetchImg = async () => {
+    const { page, pagination } = this.state;
     this.setState({ isLoading: true });
     try {
       const data = await fetchImagesWithQuery(
@@ -67,12 +50,23 @@ export class App extends Component {
         this.state.page
       );
       const { hits, totalHits } = data;
-      if (this.state.page === 1 || this.state.pagination) {
+      if (hits.length === 0) {
+        toast.warn('🦄 Wow so easy!', {
+          position: 'top-right',
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+        return;
+      } else if (page === 1 || pagination) {
         this.setState({
           galleryColection: [...hits],
           totalHits,
         });
-      } else if (!this.state.pagination) {
+      } else if (!pagination) {
         this.setState(state => ({
           galleryColection: [...state.galleryColection, ...hits],
           totalHits,
@@ -120,13 +114,7 @@ export class App extends Component {
     // console.log(page);
     this.setState({ page });
   };
-  // countPages = () => {
-  //   const { totalHits } = this.state;
-  //   if (totalHits > PER_PAGE) return Math.ceil(totalHits / PER_PAGE);
-  //   else {
-  //     return 1;
-  //   }
-  // };
+
   onDisableLoadMore = () => {
     const { totalHits, page } = this.state;
     if (!totalHits) {
@@ -156,7 +144,7 @@ export class App extends Component {
   };
 
   render() {
-    const { activeGalleryItem, isLoading, totalHits } = this.state;
+    const { activeGalleryItem, isLoading, totalHits, pagination } = this.state;
     // console.log(this.state.gellaryColection);
     const showBtnLoadMore = this.showBtnLoadMore();
     const showGallery = this.showGallery();
@@ -164,6 +152,8 @@ export class App extends Component {
     return (
       <AppWrapper>
         <SearchBar onSubmit={this.heandleSubmitForm} />
+        {/* {isLoading && galleryColection.length === 0 && <GallaryContentLoader />} */}
+        {isLoading && <Loader />}
         {showGallery && (
           <ImageGallery
             galleryColection={this.state.galleryColection}
@@ -179,21 +169,23 @@ export class App extends Component {
             activeGalleryItem={this.state.activeGalleryItem}
           />
         )}
-        {isLoading && <Loader />}
-        {showBtnLoadMore && (
+
+        {showBtnLoadMore && !pagination && (
           <Button
             onLoadMore={this.OnClickLoadMore}
             onDisableLoadMore={this.onDisableLoadMore}
           />
         )}
-        <GalleryPagination
-          onPagination={this.OnClickLoadMore}
-          countPages={countPages}
-          // pageNumber={this.state.page}
-        />
-        {/* <ToastContainer
+        {pagination && totalHits / PER_PAGE > 1 && (
+          <GalleryPagination
+            onPagination={this.OnClickLoadMore}
+            countPages={countPages}
+          />
+        )}
+
+        <ToastContainer
           position="top-right"
-          autoClose={2000}
+          autoClose={5000}
           hideProgressBar={false}
           newestOnTop={false}
           closeOnClick
@@ -201,7 +193,7 @@ export class App extends Component {
           pauseOnFocusLoss
           draggable
           pauseOnHover
-        /> */}
+        />
       </AppWrapper>
     );
   }

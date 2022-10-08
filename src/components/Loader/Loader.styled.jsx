@@ -1,8 +1,7 @@
+import { ThreeCircles } from 'react-loader-spinner';
 import styled from '@emotion/styled';
 export const SpinerWraper = styled.div`
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  opacity: 0.6;
+  margin-right: auto;
+  margin-left: auto;
 `;
+export const Spiner = styled(ThreeCircles)``;

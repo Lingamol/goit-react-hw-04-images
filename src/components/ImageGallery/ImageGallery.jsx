@@ -3,12 +3,6 @@ import PropTypes from 'prop-types';
 import { GallaryList } from './ImageGallery.styled';
 import GallaryItem from '../ImageGalleryItem';
 class ImageGallery extends Component {
-  // state = {
-  //   activeGalleryItem: {},
-  // };
-  // setactiveGalleryItem = item => {
-  //   this.setState({ activeGalleryItem: item });
-  // };
   render() {
     const { galleryColection, onSelectGalleryItem } = this.props;
     return (

@@ -89,9 +89,10 @@ export const FormBtn = styled.button`
     opacity: 1;
   }
 `;
-export const FormErrorMessage = styled.div`
+export const FormErrorMessage = styled.span`
   color: red;
-  background-color: #3f51b5;
+  /* background-color: rgb(63, 81, 181); */
+  text-align: center;
   display: flex;
   flex-direction: column;
 `;
