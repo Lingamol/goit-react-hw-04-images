@@ -199,7 +199,7 @@ export class App extends Component {
         )}
         {pagination && totalHits / PER_PAGE > 1 && (
           <GalleryPagination
-            onPagination={this.OnClickLoadMore}
+            onPagination={this.OnPagination}
             countPages={countPages}
           />
         )}
