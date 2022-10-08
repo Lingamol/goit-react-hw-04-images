@@ -1,4 +1,5 @@
-import { ToastContainer, toast } from 'react-toastify';
+// import { ToastContainer, toast } from 'react-toastify';
+
 import 'react-toastify/dist/ReactToastify.css';
 import Button from './Button';
 import ImageGallery from './ImageGallery';
@@ -9,17 +10,19 @@ import { Component } from 'react';
 import { AppWrapper } from './App.styled';
 // import { hits } from '../js/data';
 import { fetchImagesWithQuery, PER_PAGE } from 'services/api';
+import GalleryPagination from 'GalleryPagination';
 
 export class App extends Component {
   state = {
     // showModal: false,
-    isLoading: false,
+    isLoading: true,
     error: null,
     galleryColection: [],
     activeGalleryItem: null,
-    search: null,
+    search: '',
     page: 1,
-    totalHits: null,
+    totalHits: 0,
+    pagination: true,
   };
   componentDidMount() {
     console.log('App Mount');
@@ -29,80 +32,60 @@ export class App extends Component {
     // console.log('App WillUnmount');
   }
 
-  async componentDidUpdate(prevProps, prevState, snapshot) {
+  componentDidUpdate(prevProps, prevState, snapshot) {
     console.log('App componentDidUpdate');
-    // if (prevState.search !== this.state.search) {
-    //   this.setState({ page: 1 });
-    //   // console.log('prevState.search', prevState.search);
-    //   // console.log('this.state.search', this.state.search);
-    //
-    // }
-    if (
-      prevState.page !== this.state.page ||
-      prevState.search !== this.state.search
-    ) {
-      if (prevState.search !== this.state.search) {
-        if (this.state.page !== 1) {
-          this.setState({ page: 1, galleryColection: [] });
-        }
-      }
-      this.setState({ isLoading: true });
-      try {
-        const data = await fetchImagesWithQuery(
-          this.state.search,
-          this.state.page
-        );
-        const { hits, totalHits } = data;
-        // img = images;
-        if (hits.length === 0) {
-          // if (this.state.page) {
-          this.setState({
-            totalHits: null,
-
-            galleryColection: [],
-          });
-          // }
-          toast.warning(
-            'Sorry, there are no images matching your search query. Please try again.',
-            {
-              position: 'top-right',
-              autoClose: 2000,
-              hideProgressBar: false,
-              closeOnClick: true,
-              pauseOnHover: true,
-              draggable: true,
-              progress: undefined,
-            }
-          );
-
-          return;
-        } else {
-          this.setState(state => ({
-            galleryColection: [...state.galleryColection, ...hits],
-            totalHits,
-          }));
-        }
-
-        // this.setState({ galleryColection: [...images] });
-      } catch (error) {
-        this.setState({
-          error,
-        });
-        toast.error('Sorry, something going wrong :(', {
-          position: 'top-right',
-          autoClose: 2000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
-      } finally {
-        this.setState({ isLoading: false });
-      }
-      // const data = api.fetchImagesWithQuery(this.state.search);
+    const { page, search } = this.state;
+    if (prevState.search !== search || prevState.page !== page) {
+      this.FetchImg();
     }
+
+    // if (prevState.search !== search && prevState.page !== 1) {
+    //   this.setState({ page: 1, galleryColection: [] });
+    //   this.FetchImg();
+    //   console.log(
+    //     'App componentDidUpdate prevState.search !== search && prevState.page !== 1'
+    //   );
+    //   return;
+    // } else if (prevState.search !== search && prevState.page === 1) {
+    //   this.setState({ galleryColection: [] });
+    //   this.FetchImg();
+    //   console.log(
+    //     'App componentDidUpdate prevState.search !== search && prevState.page === 1'
+    //   );
+    //   return;
+    // } else if (prevState.search === search && prevState.page !== page) {
+    //   this.FetchImg();
+    //   console.log('prevState.search === search && prevState.page !== page');
+    // }
   }
+
+  FetchImg = async () => {
+    this.setState({ isLoading: true });
+    try {
+      const data = await fetchImagesWithQuery(
+        this.state.search,
+        this.state.page
+      );
+      const { hits, totalHits } = data;
+      if (this.state.page === 1 || this.state.pagination) {
+        this.setState({
+          galleryColection: [...hits],
+          totalHits,
+        });
+      } else if (!this.state.pagination) {
+        this.setState(state => ({
+          galleryColection: [...state.galleryColection, ...hits],
+          totalHits,
+        }));
+      }
+    } catch (error) {
+      this.setState({
+        error,
+      });
+    } finally {
+      this.setState({ isLoading: false });
+    }
+  };
 
   toggleModal = () => {
     // this.setState(({ showModal }) => ({
@@ -121,7 +104,11 @@ export class App extends Component {
     // console.log(search);
     const normalizedSearch = search.toLocaleLowerCase();
     if (normalizedSearch && normalizedSearch !== this.state.search) {
-      this.setState({ search: normalizedSearch });
+      this.setState({
+        search: normalizedSearch,
+        page: 1,
+        galleryColection: [],
+      });
     }
   };
   OnClickLoadMore = () => {
@@ -129,6 +116,17 @@ export class App extends Component {
       page: prevState.page + 1,
     }));
   };
+  OnPagination = page => {
+    // console.log(page);
+    this.setState({ page });
+  };
+  // countPages = () => {
+  //   const { totalHits } = this.state;
+  //   if (totalHits > PER_PAGE) return Math.ceil(totalHits / PER_PAGE);
+  //   else {
+  //     return 1;
+  //   }
+  // };
   onDisableLoadMore = () => {
     const { totalHits, page } = this.state;
     if (!totalHits) {
@@ -148,24 +146,25 @@ export class App extends Component {
       return false;
     }
   };
-  // showGallery = () => {
-  //   const { totalHits } = this.state;
-  //   if (totalHits) {
-  //     return true;
-  //   } else {
-  //     return false;
-  //   }
-  // };
+  showGallery = () => {
+    const { totalHits } = this.state;
+    if (totalHits) {
+      return true;
+    } else {
+      return false;
+    }
+  };
 
   render() {
-    const { activeGalleryItem, isLoading, galleryColection } = this.state;
+    const { activeGalleryItem, isLoading, totalHits } = this.state;
     // console.log(this.state.gellaryColection);
     const showBtnLoadMore = this.showBtnLoadMore();
-    // const showGallery = this.showGallery();
+    const showGallery = this.showGallery();
+    const countPages = Math.ceil(totalHits / PER_PAGE);
     return (
       <AppWrapper>
         <SearchBar onSubmit={this.heandleSubmitForm} />
-        {galleryColection && (
+        {showGallery && (
           <ImageGallery
             galleryColection={this.state.galleryColection}
             onSelectGalleryItem={item => {
@@ -187,7 +186,12 @@ export class App extends Component {
             onDisableLoadMore={this.onDisableLoadMore}
           />
         )}
-        <ToastContainer
+        <GalleryPagination
+          onPagination={this.OnClickLoadMore}
+          countPages={countPages}
+          // pageNumber={this.state.page}
+        />
+        {/* <ToastContainer
           position="top-right"
           autoClose={2000}
           hideProgressBar={false}
@@ -197,7 +201,7 @@ export class App extends Component {
           pauseOnFocusLoss
           draggable
           pauseOnHover
-        />
+        /> */}
       </AppWrapper>
     );
   }
