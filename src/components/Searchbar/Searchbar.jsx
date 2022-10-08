@@ -9,12 +9,18 @@ import {
   // SearchFormButtonLabel,
   FormBtn,
   SvgBtn,
+  FormRadioInput,
+  RadioWraper,
+  LabelRadio,
 } from './Searchbar.styled';
 import * as yup from 'yup';
 import { Component } from 'react';
 
 class SearchBar extends Component {
-  initialValues = { search: '' };
+  initialValues = {
+    search: '',
+    pagination: 'LoadMore',
+  };
 
   onSubmitForm = (values, { resetForm }) => {
     // console.log('values', values);
@@ -59,6 +65,25 @@ class SearchBar extends Component {
               placeholder="Search images and photos"
             />
             <ErrorMessage name="search" component={FormErrorMessage} />
+            {/* <div id="my-radio-group">Pagination select</div> */}
+            <RadioWraper role="group" aria-labelledby="my-radio-group">
+              <LabelRadio>
+                <FormRadioInput
+                  type="radio"
+                  name="pagination"
+                  value="LoadMore"
+                />
+                LoadMore
+              </LabelRadio>
+              <LabelRadio>
+                <FormRadioInput
+                  type="radio"
+                  name="pagination"
+                  value="Pagination"
+                />
+                Pagination
+              </LabelRadio>
+            </RadioWraper>
           </SearchForm>
         </Formik>
         {/* <Envelope width="90" height="90" color="red" /> */}

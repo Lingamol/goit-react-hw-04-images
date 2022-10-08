@@ -113,3 +113,14 @@ export const SvgBtn = styled(GoSearch)`
 
   color: black;
 `;
+export const FormRadioInput = styled(Field)``;
+export const RadioWraper = styled.div`
+  display: flex;
+  /* flex-direction: column; */
+  color: black;
+`;
+export const LabelRadio = styled.label`
+  :not(:last-child) {
+    margin-right: 5px;
+  }
+`;

@@ -16,7 +16,7 @@ import GalleryPagination from 'components/GalleryPagination';
 export class App extends Component {
   state = {
     // showModal: false,
-    isLoading: true,
+    isLoading: false,
     error: null,
     galleryColection: [],
     activeGalleryItem: null,
@@ -26,7 +26,7 @@ export class App extends Component {
     pagination: false,
   };
   componentDidMount() {
-    console.log('App Mount');
+    // console.log('App Mount');
   }
 
   componentWillUnmount() {
@@ -34,7 +34,7 @@ export class App extends Component {
   }
 
   componentDidUpdate(prevProps, prevState, snapshot) {
-    console.log('App componentDidUpdate');
+    // console.log('App componentDidUpdate');
     const { page, search } = this.state;
     if (prevState.search !== search || prevState.page !== page) {
       this.FetchImg();
@@ -51,15 +51,18 @@ export class App extends Component {
       );
       const { hits, totalHits } = data;
       if (hits.length === 0) {
-        toast.warn('🦄 Wow so easy!', {
-          position: 'top-right',
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
+        toast.warn(
+          '🦄 Sorry, there are no images matching your search query. Please try again.',
+          {
+            position: 'top-right',
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          }
+        );
         return;
       } else if (page === 1 || pagination) {
         this.setState({
@@ -75,6 +78,15 @@ export class App extends Component {
     } catch (error) {
       this.setState({
         error,
+      });
+      toast.error('Sorry, something going wrong :(', {
+        position: 'top-right',
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
       });
     } finally {
       this.setState({ isLoading: false });
@@ -94,8 +106,13 @@ export class App extends Component {
     this.setState({ activeGalleryItem: item });
   };
 
-  heandleSubmitForm = ({ search }) => {
-    // console.log(search);
+  heandleSubmitForm = ({ search, pagination }) => {
+    // console.log(pagination);
+    if (pagination !== 'LoadMore') {
+      this.setState({ pagination: true });
+    } else if (this.state.pagination) {
+      this.setState({ pagination: false });
+    }
     const normalizedSearch = search.toLocaleLowerCase();
     if (normalizedSearch && normalizedSearch !== this.state.search) {
       this.setState({
