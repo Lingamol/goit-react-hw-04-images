@@ -172,7 +172,10 @@ export class App extends Component {
     const countPages = Math.ceil(totalHits / PER_PAGE);
     return (
       <AppWrapper>
-        <SearchBar onSubmit={this.heandleSubmitForm} />
+        <SearchBar
+          onSubmit={this.heandleSubmitForm}
+          paginationMode={pagination}
+        />
         {/* {isLoading && galleryColection.length === 0 && <GallaryContentLoader />} */}
         {isLoading && <Loader />}
         {showGallery && (

@@ -19,14 +19,14 @@ import { Component } from 'react';
 class SearchBar extends Component {
   initialValues = {
     search: '',
-    pagination: 'LoadMore',
+    pagination: this.props.paginationMode ? 'Pagination' : 'LoadMore',
   };
 
   onSubmitForm = (values, { resetForm }) => {
     // console.log('values', values);
     //   console.log('actions', actions);
     this.props.onSubmit(values);
-    resetForm();
+    // resetForm();
   };
 
   schema = yup.object().shape({
@@ -92,4 +92,7 @@ class SearchBar extends Component {
   }
 }
 export default SearchBar;
-SearchBar.propTypes = { onSubmit: PropTypes.func.isRequired };
+SearchBar.propTypes = {
+  onSubmit: PropTypes.func.isRequired,
+  paginationMode: PropTypes.bool.isRequired,
+};
