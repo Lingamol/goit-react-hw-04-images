@@ -89,7 +89,7 @@ export const FormBtn = styled.button`
     opacity: 1;
   }
   &:disabled {
-    background-color: #ff6d6d;
+    background-color: #858dbb;
   }
 `;
 export const FormErrorMessage = styled.span`
@@ -114,7 +114,7 @@ export const SvgBtn = styled(GoSearch)`
   width: 30px;
   height: auto;
 
-  color: black;
+  color: rgb(63, 81, 181);
 `;
 export const FormRadioInput = styled(Field)``;
 export const RadioWraper = styled.div`
