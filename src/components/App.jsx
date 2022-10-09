@@ -175,7 +175,7 @@ export class App extends Component {
         <SearchBar
           onSubmit={this.heandleSubmitForm}
           paginationMode={pagination}
-          isSabmiting={isLoading}
+          isSubmitting={isLoading}
         />
         {/* {isLoading && galleryColection.length === 0 && <GallaryContentLoader />} */}
         {isLoading && <Loader />}

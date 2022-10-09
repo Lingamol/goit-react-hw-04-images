@@ -48,10 +48,13 @@ class SearchBar extends Component {
           validationSchema={this.schema}
           onSubmit={this.onSubmitForm}
         >
+          {/* {({ isSubmitting }) => {
+            console.log(isSubmitting);
+            return ( */}
           <SearchForm className="form">
             <FormBtn
               type="submit"
-              disabled={this.props.isSabmiting}
+              disabled={this.props.isSubmitting}
               className="button"
               aria-label="Search"
             >
@@ -90,6 +93,7 @@ class SearchBar extends Component {
               </LabelRadio>
             </RadioWraper>
           </SearchForm>
+          {/* ); }} */}
         </Formik>
         {/* <Envelope width="90" height="90" color="red" /> */}
       </SearchBarWrapper>
@@ -100,5 +104,5 @@ export default SearchBar;
 SearchBar.propTypes = {
   onSubmit: PropTypes.func.isRequired,
   paginationMode: PropTypes.bool.isRequired,
-  isSabmiting: PropTypes.bool.isRequired,
+  isSubmitting: PropTypes.bool.isRequired,
 };
