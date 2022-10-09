@@ -88,6 +88,9 @@ export const FormBtn = styled.button`
   &:hover {
     opacity: 1;
   }
+  &:disabled {
+    background-color: #ff6d6d;
+  }
 `;
 export const FormErrorMessage = styled.span`
   color: red;

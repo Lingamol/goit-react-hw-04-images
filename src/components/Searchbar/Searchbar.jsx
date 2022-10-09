@@ -49,7 +49,12 @@ class SearchBar extends Component {
           onSubmit={this.onSubmitForm}
         >
           <SearchForm className="form">
-            <FormBtn type="submit" className="button" aria-label="Search">
+            <FormBtn
+              type="submit"
+              disabled={this.props.isSabmiting}
+              className="button"
+              aria-label="Search"
+            >
               <SvgBtn />
               {/* <SearchFormButtonLabel className="button-label">
               Search
@@ -95,4 +100,5 @@ export default SearchBar;
 SearchBar.propTypes = {
   onSubmit: PropTypes.func.isRequired,
   paginationMode: PropTypes.bool.isRequired,
+  isSabmiting: PropTypes.bool.isRequired,
 };
