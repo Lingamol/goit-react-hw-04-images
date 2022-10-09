@@ -1,27 +1,26 @@
 import PropTypes from 'prop-types';
 import { GallaryItem, GallaryItemImg } from './ImageGalleryItem.styled';
 
-const ImageGalleryItem = ({ galleryColection, onSelectGalleryItem }) => {
-  return galleryColection.map(item => (
-    <GallaryItem key={item.id} className="gallery-item">
+const ImageGalleryItem = ({ galleryItem, onSelectGalleryItem }) => {
+  const { webformatURL } = galleryItem;
+  return (
+    <GallaryItem className="gallery-item">
       <GallaryItemImg
-        src={item.webformatURL}
+        src={webformatURL}
         alt=""
-        onClick={() => onSelectGalleryItem(item)}
+        onClick={() => onSelectGalleryItem(galleryItem)}
       />
     </GallaryItem>
-  ));
+  );
 };
 
 export default ImageGalleryItem;
 
 ImageGalleryItem.ptopTypes = {
   onSelectGalleryItem: PropTypes.func.isRequired,
-  galleryColection: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.number.isRequired,
-      webformatURL: PropTypes.string.isRequired,
-      largeImageURL: PropTypes.string.isRequired,
-    }).isRequired
-  ).isRequired,
+  galleryItem: PropTypes.shape({
+    id: PropTypes.number.isRequired,
+    webformatURL: PropTypes.string.isRequired,
+    largeImageURL: PropTypes.string.isRequired,
+  }).isRequired,
 };

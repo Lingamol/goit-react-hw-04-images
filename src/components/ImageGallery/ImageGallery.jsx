@@ -7,10 +7,13 @@ class ImageGallery extends Component {
     const { galleryColection, onSelectGalleryItem } = this.props;
     return (
       <GallaryList className="gallery">
-        <GallaryItem
-          galleryColection={galleryColection}
-          onSelectGalleryItem={onSelectGalleryItem}
-        />
+        {galleryColection.map(item => (
+          <GallaryItem
+            key={item.id}
+            galleryItem={item}
+            onSelectGalleryItem={onSelectGalleryItem}
+          />
+        ))}
       </GallaryList>
     );
   }
