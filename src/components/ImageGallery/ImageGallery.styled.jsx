@@ -12,4 +12,5 @@ export const GallaryList = styled.ul`
   margin-left: auto;
   margin-right: auto;
   position: relative;
+  overflow: hidden;
 `;

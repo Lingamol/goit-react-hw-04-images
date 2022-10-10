@@ -37,10 +37,9 @@ export class App extends Component {
     // console.log('App componentDidUpdate');
     const { page, search, pagination } = this.state;
     if (
-      (prevState.search !== search ||
-        prevState.page !== page ||
-        prevState.pagination !== pagination) &&
-      search !== ''
+      prevState.search !== search ||
+      prevState.page !== page ||
+      prevState.pagination !== pagination
     ) {
       this.FetchImg();
     }
@@ -52,6 +51,9 @@ export class App extends Component {
 
   FetchImg = async () => {
     const { page, pagination } = this.state;
+    if (this.state.search === '') {
+      return;
+    }
     this.setState({ isLoading: true });
     try {
       const data = await fetchImagesWithQuery(
