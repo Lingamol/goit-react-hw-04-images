@@ -198,7 +198,6 @@ export class App extends Component {
             onSelectGalleryItem={item => {
               this.onSelectGalleryItem(item);
             }}
-            loadMore={this.OnClickLoadMore}
           />
         )}
 

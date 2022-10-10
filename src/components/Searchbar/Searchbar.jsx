@@ -28,9 +28,6 @@ class SearchBar extends Component {
     this.props.onSubmit(values);
     // resetForm();
   };
-  onChangeForm = (values, { resetForm }) => {
-    console.log(values);
-  };
 
   schema = yup.object().shape({
     search: yup
