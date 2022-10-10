@@ -3,13 +3,13 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { PagginationWrapper } from './GalleryPagination.styled';
 
-const GalleryPagination = ({ onPagination, countPages }) => {
+const GalleryPagination = ({ onPagination, countPages, currentPage }) => {
   return (
     <PagginationWrapper>
       <Pagination
         // boundaryCount={5}
         count={countPages}
-        // page={}
+        page={currentPage}
         showFirstButton
         showLastButton
         variant="outlined"
@@ -25,4 +25,5 @@ export default GalleryPagination;
 GalleryPagination.propTypes = {
   onPagination: PropTypes.func.isRequired,
   countPages: PropTypes.number.isRequired,
+  currentPage: PropTypes.number.isRequired,
 };

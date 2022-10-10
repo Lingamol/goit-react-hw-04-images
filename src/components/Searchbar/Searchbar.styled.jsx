@@ -116,11 +116,12 @@ export const SvgBtn = styled(GoSearch)`
 
   color: rgb(63, 81, 181);
 `;
-export const FormRadioInput = styled(Field)``;
+export const FormRadioInput = styled.input``;
 export const RadioWraper = styled.div`
   display: flex;
   /* flex-direction: column; */
   color: black;
+  margin-left: 10px;
 `;
 export const LabelRadio = styled.label`
   :not(:last-child) {

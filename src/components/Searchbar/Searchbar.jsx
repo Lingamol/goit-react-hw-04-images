@@ -19,7 +19,7 @@ import { Component } from 'react';
 class SearchBar extends Component {
   initialValues = {
     search: '',
-    pagination: this.props.paginationMode ? 'Pagination' : 'LoadMore',
+    // pagination: this.props.paginationMode ? 'Pagination' : 'LoadMore',
   };
 
   onSubmitForm = (values, { resetForm }) => {
@@ -27,6 +27,9 @@ class SearchBar extends Component {
     //   console.log('actions', actions);
     this.props.onSubmit(values);
     // resetForm();
+  };
+  onChangeForm = (values, { resetForm }) => {
+    console.log(values);
   };
 
   schema = yup.object().shape({
@@ -47,6 +50,7 @@ class SearchBar extends Component {
           initialValues={this.initialValues}
           validationSchema={this.schema}
           onSubmit={this.onSubmitForm}
+          onChange={this.onChangeForm}
         >
           {/* {({ isSubmitting }) => {
             console.log(isSubmitting);
@@ -73,28 +77,36 @@ class SearchBar extends Component {
               placeholder="Search images and photos"
             />
             <ErrorMessage name="search" component={FormErrorMessage} />
-            {/* <div id="my-radio-group">Pagination select</div> */}
-            <RadioWraper role="group" aria-labelledby="my-radio-group">
-              <LabelRadio>
-                <FormRadioInput
-                  type="radio"
-                  name="pagination"
-                  value="LoadMore"
-                />
-                LoadMore
-              </LabelRadio>
-              <LabelRadio>
-                <FormRadioInput
-                  type="radio"
-                  name="pagination"
-                  value="Pagination"
-                />
-                Pagination
-              </LabelRadio>
-            </RadioWraper>
           </SearchForm>
           {/* ); }} */}
         </Formik>
+        {/* <div id="my-radio-group">Pagination select</div> */}
+        <RadioWraper role="group" aria-labelledby="my-radio-group">
+          <LabelRadio>
+            <FormRadioInput
+              type="radio"
+              name="pagination"
+              checked={this.props.paginationMode === 'LoadMore'}
+              value="LoadMore"
+              onChange={event =>
+                this.props.radioBtnChange(event.currentTarget.value)
+              }
+            />
+            LoadMore
+          </LabelRadio>
+          <LabelRadio>
+            <FormRadioInput
+              type="radio"
+              name="pagination"
+              checked={this.props.paginationMode === 'Pagination'}
+              value="Pagination"
+              onChange={event =>
+                this.props.radioBtnChange(event.currentTarget.value)
+              }
+            />
+            Pagination
+          </LabelRadio>
+        </RadioWraper>
         {/* <Envelope width="90" height="90" color="red" /> */}
       </SearchBarWrapper>
     );
@@ -103,6 +115,7 @@ class SearchBar extends Component {
 export default SearchBar;
 SearchBar.propTypes = {
   onSubmit: PropTypes.func.isRequired,
-  paginationMode: PropTypes.bool.isRequired,
+  paginationMode: PropTypes.string.isRequired,
   isSubmitting: PropTypes.bool.isRequired,
+  radioBtnChange: PropTypes.func.isRequired,
 };

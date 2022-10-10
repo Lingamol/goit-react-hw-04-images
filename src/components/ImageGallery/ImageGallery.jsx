@@ -1,4 +1,5 @@
 import { Component } from 'react';
+// import InfiniteScroll from 'react-infinite-scroller';
 import PropTypes from 'prop-types';
 import { GallaryList } from './ImageGallery.styled';
 import GallaryItem from '../ImageGalleryItem';

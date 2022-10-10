@@ -23,7 +23,7 @@ export class App extends Component {
     search: '',
     page: 1,
     totalHits: 0,
-    pagination: false,
+    pagination: 'LoadMore',
   };
   componentDidMount() {
     // console.log('App Mount');
@@ -36,13 +36,18 @@ export class App extends Component {
   componentDidUpdate(prevProps, prevState, snapshot) {
     // console.log('App componentDidUpdate');
     const { page, search, pagination } = this.state;
-    if (prevState.search !== search || prevState.page !== page) {
+    if (
+      (prevState.search !== search ||
+        prevState.page !== page ||
+        prevState.pagination !== pagination) &&
+      search !== ''
+    ) {
       this.FetchImg();
     }
-    if (prevState.pagination !== pagination) {
-      this.setState({ galleryColection: [], page: 1 });
-      this.FetchImg();
-    }
+    // if (prevState.pagination !== pagination && search !== '') {
+    //   this.setState({ galleryColection: [], page: 1 });
+    //   this.FetchImg();
+    // }
   }
 
   FetchImg = async () => {
@@ -68,12 +73,12 @@ export class App extends Component {
           }
         );
         return;
-      } else if (page === 1 || pagination) {
+      } else if (page === 1 || pagination === 'Pagination') {
         this.setState({
           galleryColection: [...hits],
           totalHits,
         });
-      } else if (!pagination) {
+      } else if (pagination === 'LoadMore') {
         this.setState(state => ({
           galleryColection: [...state.galleryColection, ...hits],
           totalHits,
@@ -105,18 +110,25 @@ export class App extends Component {
       activeGalleryItem: null,
     }));
   };
+  radioBtnChange = value => {
+    // this.setState(({ showModal }) => ({
+    //   showModal: !showModal,
+    // }));
+    console.log(value);
+    this.setState({ pagination: value, page: 1, galleryColection: [] });
+  };
 
   onSelectGalleryItem = item => {
     this.setState({ activeGalleryItem: item });
   };
 
-  heandleSubmitForm = ({ search, pagination }) => {
+  heandleSubmitForm = ({ search }) => {
     // console.log(pagination);
-    if (pagination !== 'LoadMore') {
-      this.setState({ pagination: true });
-    } else if (this.state.pagination) {
-      this.setState({ pagination: false });
-    }
+    // if (pagination !== 'LoadMore') {
+    //   this.setState({ pagination: true });
+    // } else if (this.state.pagination) {
+    //   this.setState({ pagination: false });
+    // }
     const normalizedSearch = search.toLocaleLowerCase();
     if (normalizedSearch && normalizedSearch !== this.state.search) {
       this.setState({
@@ -176,6 +188,7 @@ export class App extends Component {
           onSubmit={this.heandleSubmitForm}
           paginationMode={pagination}
           isSubmitting={isLoading}
+          radioBtnChange={this.radioBtnChange}
         />
         {/* {isLoading && galleryColection.length === 0 && <GallaryContentLoader />} */}
         {isLoading && <Loader />}
@@ -185,6 +198,7 @@ export class App extends Component {
             onSelectGalleryItem={item => {
               this.onSelectGalleryItem(item);
             }}
+            loadMore={this.OnClickLoadMore}
           />
         )}
 
@@ -195,16 +209,17 @@ export class App extends Component {
           />
         )}
 
-        {showBtnLoadMore && !pagination && (
+        {showBtnLoadMore && pagination === 'LoadMore' && (
           <Button
             onLoadMore={this.OnClickLoadMore}
             onDisableLoadMore={this.onDisableLoadMore}
           />
         )}
-        {pagination && totalHits / PER_PAGE > 1 && (
+        {pagination === 'Pagination' && totalHits / PER_PAGE > 1 && (
           <GalleryPagination
             onPagination={this.OnPagination}
             countPages={countPages}
+            currentPage={this.state.page}
           />
         )}
 
