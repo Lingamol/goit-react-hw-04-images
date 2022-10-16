@@ -23,6 +23,41 @@ export const App = () => {
   const [pagination, setPagination] = useState('LoadMore');
 
   useEffect(() => {
+    const FetchImg = async () => {
+      setIsLoading(true);
+      setError(null);
+      try {
+        const data = await fetchImagesWithQuery(search, page);
+        const { hits, totalHits } = data;
+        if (hits.length === 0) {
+          toast.warn(
+            '🦄 Sorry, there are no images matching your search query. Please try again.',
+            {
+              position: 'top-right',
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+            }
+          );
+          // setGalleryColection([]);
+          setTotalHits(0);
+          return;
+        } else if (page === 1 || pagination === 'Pagination') {
+          setGalleryColection([...hits]);
+          setTotalHits(totalHits);
+        } else if (pagination === 'LoadMore') {
+          setGalleryColection(prevState => [...prevState, ...hits]);
+          setTotalHits(totalHits);
+        }
+      } catch (error) {
+        setError(error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
     if (search === '') {
       return;
     }
@@ -43,40 +78,6 @@ export const App = () => {
       progress: undefined,
     });
   }, [error]);
-
-  const FetchImg = async () => {
-    setIsLoading(true);
-    setError(null);
-    try {
-      const data = await fetchImagesWithQuery(search, page);
-      const { hits, totalHits } = data;
-      if (hits.length === 0) {
-        toast.warn(
-          '🦄 Sorry, there are no images matching your search query. Please try again.',
-          {
-            position: 'top-right',
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-          }
-        );
-        return;
-      } else if (page === 1 || pagination === 'Pagination') {
-        setGalleryColection([...hits]);
-        setTotalHits(totalHits);
-      } else if (pagination === 'LoadMore') {
-        setGalleryColection(prevState => [...prevState, ...hits]);
-        setTotalHits(totalHits);
-      }
-    } catch (error) {
-      setError(error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
 
   const toggleModal = () => {
     setActiveGalleryItem(null);
