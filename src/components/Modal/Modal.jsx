@@ -14,7 +14,7 @@ const Modal = ({ activeGalleryItem, onClose }) => {
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  });
+  }, [onClose]);
 
   const handleOverlayClick = event => {
     if (event.currentTarget === event.target) {
